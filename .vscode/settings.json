@@ -1,0 +1,8 @@
+{
+    "nrf-connect.applications": [
+        "${workspaceFolder}\\tag",
+        "${workspaceFolder}\\blink",
+        "${workspaceFolder}\\blinky",
+        "${workspaceFolder}\\nrf-esl-bluetooth\\samples\\peripheral_esl"
+    ]
+}

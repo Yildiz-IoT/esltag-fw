@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "sensor_collector"
+		},
+		{
+			"name": "sensor_node",
+			"path": "sensor_node"
+		}
+	],
+	"settings": {}
+}

@@ -1,0 +1,1 @@
+west build --build-dir build_MYTAG_52833_4_2_EPD -p -b mytag_nrf52840 -- -DOVERLAY_CONFIG="mytag_nrf52880_4in2_v2_epd.conf" -DDTC_OVERLAY_FILE="conf/mytag_nrf52880/mytag_nrf52880_4in2_v2_epd.overlay" -Dmcuboot_DTS_ROOT="C:/nrf-esl-main-test2/samples/peripheral_esl/"
