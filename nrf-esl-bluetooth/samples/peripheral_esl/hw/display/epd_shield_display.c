@@ -14,11 +14,13 @@
 #include "esl.h"
 #include "esl_hw_impl.h"
 
+#include "barcode_encoder.h"
+
 LOG_MODULE_DECLARE(peripheral_esl);
 #if DT_HAS_COMPAT_STATUS_OKAY(solomon_ssd16xxfb)
 /* Choose this value according EPD datasheet */
 #define SSD16XX_FULL_UPDATE_TIME 3500
-#define DT_DRV_COMPAT solomon_ssd16xxfb
+#define DT_DRV_COMPAT		 solomon_ssd16xxfb
 #endif /* DT_HAS_COMPAT_STATUS_OKAY(solomon_ssd16xxfb) */
 
 #if defined(CONFIG_CHARACTER_FRAMEBUFFER)
@@ -275,11 +277,21 @@ end:
 
 	return err;
 }
-
+void flip_bits(uint8_t *array, size_t length)
+{
+	for (size_t i = 0; i < length; ++i) {
+		array[i] = ~array[i];
+	}
+}
+uint8_t barcode_buffer[512]; /* Buffer for the barcode bitmap */
 void display_unassociated(uint8_t disp_idx)
 {
 	char tag_str[BT_ADDR_LE_STR_LEN] = {0};
 	struct bt_le_oob oob;
+
+	/* For barcode rendering */
+	const char *barcode_data = "0123456789012"; /* Example UPC-A barcode */
+	barcode_error_t result;
 
 	/* print bt addr on display*/
 #if defined(CONFIG_BT_ESL_PTS)
@@ -305,15 +317,38 @@ void display_unassociated(uint8_t disp_idx)
 	int err;
 
 	display_blanking_on(display_dev);
-	cfb_framebuffer_clear(display_dev, true);
-	cfb_print(display_dev, "Hello Nordic!", 0, 0 * font_height);
-	cfb_print(display_dev, "UNAssociated", 0, 1 * font_height);
-	cfb_print(display_dev, "ESL TAG", 0, 2 * font_height);
-	cfb_print(display_dev, tag_str, 0, 3 * font_height);
-	cfb_print(display_dev, "APAC", 0, 4 * font_height);
-	err = cfb_framebuffer_finalize(display_dev);
-	if (err) {
-		LOG_ERR("cfb_framebuffer_finalize (rc %d)", err);
+	// cfb_framebuffer_clear(display_dev, true);
+	// cfb_print(display_dev, "Hello Nordic!", 0, 0 * font_height);
+	// cfb_print(display_dev, "UNAssociated", 0, 1 * font_height);
+	// cfb_print(display_dev, "ESL TAG", 0, 2 * font_height);
+	// cfb_print(display_dev, tag_str, 0, 3 * font_height);
+	// cfb_print(display_dev, "APAC", 0, 4 * font_height);
+	// err = cfb_framebuffer_finalize(display_dev);
+	// if (err) {
+	// 	LOG_ERR("cfb_framebuffer_finalize (rc %d)", err);
+	// }
+
+	/* Render barcode on the display */
+	memset(barcode_buffer, 0, sizeof(barcode_buffer));
+
+	/* Generate an EAN-13 barcode - use scan_mode 6 for correct display orientation */
+	result = barcode_render(barcode_data, BARCODE_EAN13, barcode_buffer,
+				1, /* scan_mode=6 needed for e-ink display */
+				120, 24, true);
+
+	if (result == BARCODE_SUCCESS) {
+		/* Define the position to place the barcode */
+		buf_desc.width = 120;
+		buf_desc.height = 24;
+		buf_desc.pitch = buf_desc.width;
+		buf_desc.buf_size = (120 * 24) / EPD_MONO_NUMOF_ROWS_PER_PAGE;
+
+		flip_bits(barcode_buffer, buf_desc.buf_size);
+		/* Write barcode to the display */
+		display_write(display_dev, 10, 8, &buf_desc, barcode_buffer);
+		LOG_INF("Barcode rendered successfully");
+	} else {
+		LOG_ERR("Failed to render barcode: %s", barcode_get_error_message(result));
 	}
 
 	display_blanking_off(display_dev);
