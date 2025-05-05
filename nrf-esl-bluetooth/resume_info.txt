@@ -1,0 +1,26 @@
+# Cursor Session Resume Information
+
+**Project:** Refactoring the ESL Tag Firmware (nrf-esl-bluetooth)
+
+**Workspace Root:** /p:/YILDIZIoT/SmartProducts/ElectronicShelfLabel/TAG/fw/nrf-esl-bluetooth
+
+**Current Status:**
+*   Initiated a project refactor within the `organized/` directory.
+*   Created a Project Requirements Document (PRD) at `organized/PRD.md`.
+*   Committed all changes to the local `main` branch.
+*   Pushed the `main` branch to the remote repository `origin`.
+*   Updated the `origin` remote URL to `https://github.com/Yildiz-IoT/esltag-fw.git`.
+*   The Git working directory should be clean, and the local `main` branch should be up-to-date with the remote.
+
+**Project Plan:**
+*   The detailed plan and progress are tracked in `organized/PRD.md`.
+
+**Next Step (According to PRD):**
+*   Set up the basic Zephyr project structure by creating initial versions of:
+    *   `organized/CMakeLists.txt`
+    *   `organized/Kconfig`
+
+**To Resume:**
+1.  Ensure the workspace is synced with the remote Git repository (`git pull origin main` if necessary).
+2.  Review the `organized/PRD.md` file.
+3.  Proceed with creating the `organized/CMakeLists.txt` and `organized/Kconfig` files. 
