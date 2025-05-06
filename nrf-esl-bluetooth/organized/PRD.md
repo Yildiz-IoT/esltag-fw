@@ -18,68 +18,79 @@
 
 ```
 organized/
-├── app/                  # Main application logic, state management
-│   ├── include/
-│   └── src/
-│       └── main.c
-├── bsp/                  # Board Support Package (Hardware specific init)
-│   ├── include/
-│   └── src/
-├── drivers/              # Hardware drivers (EPD, buttons, sensors etc.)
-│   ├── include/
-│   └── src/
-│       ├── epd/
-│       └── button/
-├── esl/                  # Core ESL protocol implementation (Refactored from service/)
-│   ├── include/
-│   └── src/
-├── bluetooth/            # Generic Bluetooth management (advertising, connection)
-│   ├── include/
-│   └── src/
-├── config/               # Application configuration (prj.conf, Kconfig fragments)
-├── boards/               # Board-specific device tree overlays and config
-├── CMakeLists.txt        # Main CMake build script
-├── Kconfig               # Main Kconfig file
-├── PRD.md                # This file
-└── zephyr/               # Zephyr RTOS (as submodule or managed by west) - TBD
+├── tag/                    # ESL Tag Firmware Application
+│   ├── app/                #   Main application logic & state management (.c, .h files)
+│   ├── bsp/                #   Board Support Package (.c, .h files)
+│   ├── drivers/            #   Hardware drivers
+│   │   ├── epd/            #     E-Paper Display driver (.c, .h files)
+│   │   └── button/         #     Button driver (.c, .h files)
+│   ├── bluetooth/          #   Bluetooth LE management & ESL Service
+│   │   └── esl/            #     ESL specific service/profile logic (.c, .h files)
+│   │   # Generic BLE mgmt (.c, .h files) would also go here
+│   ├── config/             #   Application configuration (prj.conf, Kconfig fragments)
+│   ├── boards/             #   Board-specific device tree overlays and config
+│   ├── CMakeLists.txt      #   Main CMake build script for the tag
+│   └── Kconfig             #   Main Kconfig file for the tag
+├── access_point/           # ESL Access Point Firmware Application (Placeholder)
+│   └── ...               #   (Structure TBD)
+├── PRD.md                  # This file (describes overall reorganization)
+└── zephyr/                 # Zephyr RTOS (location/management TBD)
 ```
 
-## 4. ToDo
+## 4. Development Principles
 
-*   [ ] **Setup & Planning:**
-    *   [ ] Finalize detailed project requirements (specific ESL features, power constraints, etc.) - *Requires User Input*
-    *   [ ] Set up basic Zephyr project structure (`organized/CMakeLists.txt`, `organized/Kconfig`).
-    *   [ ] Decide on Zephyr integration method (submodule vs. west manifest).
-*   [ ] **Core Bluetooth & ESL Service:**
-    *   [ ] Create `bluetooth/` module structure and basic files.
-    *   [ ] Implement basic BLE advertising and connection management using Zephyr APIs.
-    *   [ ] Create `esl/` module structure and basic files.
-    *   [ ] Define ESL GATT service structure using Zephyr GATT APIs.
-    *   [ ] Refactor relevant peripheral-role code from `service/esl.*` and `service/esl_common.*` into `esl/` and `bluetooth/`.
-*   [ ] **Hardware Abstraction (Drivers & BSP):**
-    *   [ ] Identify required drivers (EPD, Button).
-    *   [ ] Create `drivers/` module structure.
-    *   [ ] Refactor EPD driver from `samples/peripheral_esl/driver` or `hw` into `drivers/epd/`.
-    *   [ ] Create Button driver in `drivers/button/`.
-    *   [ ] Create `bsp/` module structure.
-    *   [ ] Implement BSP for the target board (e.g., nRF52833DK) in `bsp/`.
-*   [ ] **Application Logic (`app`):**
-    *   [ ] Create `app/` module structure (`include/`, `src/main.c`).
-    *   [ ] Implement main application state machine skeleton.
-    *   [ ] Integrate module initializations (BSP, drivers, Bluetooth, ESL).
-    *   [ ] Implement basic logic to handle ESL events and update display.
-*   [ ] **Integration & Configuration:**
-    *   [ ] Create initial `config/prj.conf`.
-    *   [ ] Create initial board overlay in `boards/`.
-    *   [ ] Ensure all modules are correctly linked via CMake.
-*   [ ] **Testing & Refinement:**
-    *   [ ] Perform initial build and flash test.
-    *   [ ] Test basic advertising and connection.
-    *   [ ] Test ESL service discovery and basic command handling.
-    *   [ ] Test EPD updates.
-    *   [ ] Optimize and refactor as needed.
+*   **Structure First:** Focus on establishing the complete directory structure, basic build files (`CMakeLists.txt`, `Kconfig`), and configuration files (`prj.conf`, board overlays) for the **tag** firmware before refactoring or copying detailed source code logic (*.c, *.h) from the original project.
+*   **Modular Design:** Aim for clear separation of concerns between modules within the tag firmware (`app`, `bsp`, `drivers`, `bluetooth`).
+*   **PRD Driven:** Follow the steps outlined in the ToDo section below. Update the PRD as tasks are completed or requirements change.
 
-## 5. Done
+## 5. ToDo
+
+*   [ ] **Setup & Planning (Tag Firmware):**
+    *   [X] Create `organized/tag/` directory structure.
+    *   [~] Finalize detailed project requirements for the **tag**. *(Initial details gathered; further refinement as needed during development)*
+        *   **JSON Update Method:** As defined in the root `PRD.MD` (Section 2), using a JSON object with fields like `prod`, `price`, `barcode`, `pos`, `format`, and `color` for partial or full display updates. Key aspects:
+            *   Field list (`prod`, `brnd`, `price`, `unit`, `exp`, `barcode`) is fixed for now.
+            *   `format` array values (bold, size, style) will be mapped to enums/macros.
+            *   `pos` coordinates are absolute pixel values.
+            *   The tag will render text/barcodes based on this JSON and update the EPD.
+        *   **Tag Lifecycle States:** (Manufacturing, Testing, Inventory, Provisioned, Assigned Store, Assigned Product, Active, Deactivate) - See details from provided table.
+            *   Display of company/store name in Provisioned/Assigned Store states: Method TBD (likely AP or NFC).
+            *   In "Deactivate" state, the EPD will display "Disconnected".
+            *   Tag status changes are reported to the backend by the Access Point upon reconnection.
+            *   Requires a robust state machine and NVM for persisting state.
+    *   [X] Set up basic Zephyr project structure for the tag (`organized/tag/CMakeLists.txt`, `organized/tag/Kconfig`).
+*   [ ] **Core Bluetooth & ESL Service (Tag Firmware):**
+    *   [ ] Create `organized/tag/bluetooth/` module structure and basic files.
+    *   [ ] Implement basic BLE advertising and connection management using Zephyr APIs in `organized/tag/bluetooth/`.
+    *   [ ] Create `organized/tag/bluetooth/esl/` structure and basic files.
+    *   [ ] Define ESL GATT service structure using Zephyr GATT APIs in `organized/tag/bluetooth/esl/`.
+    *   [ ] Refactor relevant peripheral-role code from `service/esl.*` and `service/esl_common.*` into `organized/tag/bluetooth/` and `organized/tag/bluetooth/esl/`.
+*   [ ] **Hardware Abstraction (Drivers & BSP - Tag Firmware):**
+    *   [ ] Identify required drivers for the **tag** (EPD, Button).
+    *   [ ] Create `organized/tag/drivers/` module structure.
+    *   [ ] Refactor EPD driver from `samples/peripheral_esl/driver` or `hw` into `organized/tag/drivers/epd/`.
+    *   [ ] Create Button driver in `organized/tag/drivers/button/`.
+    *   [ ] Create `organized/tag/bsp/` module structure.
+    *   [ ] Implement BSP for the target **tag** board (e.g., nRF52833DK) in `organized/tag/bsp/`.
+*   [ ] **Application Logic (`app` - Tag Firmware):**
+    *   [ ] Create `organized/tag/app/` module structure.
+    *   [ ] Implement main application state machine skeleton in `organized/tag/app/`.
+    *   [ ] Integrate module initializations (BSP, drivers, Bluetooth, ESL) in `organized/tag/app/`.
+    *   [ ] Implement basic logic to handle ESL events and update display in `organized/tag/app/`.
+*   [ ] **Integration & Configuration (Tag Firmware):**
+    *   [ ] Create initial `organized/tag/config/prj.conf`.
+    *   [ ] Create initial board overlay in `organized/tag/boards/`.
+    *   [ ] Ensure all tag modules are correctly linked via `organized/tag/CMakeLists.txt`.
+*   [ ] **Testing & Refinement (Tag Firmware):**
+    *   [ ] Perform initial build and flash test for the **tag**.
+    *   [ ] Test basic advertising and connection for the **tag**.
+    *   [ ] Test ESL service discovery and basic command handling for the **tag**.
+    *   [ ] Test EPD updates for the **tag**.
+    *   [ ] Optimize and refactor the **tag** firmware as needed.
+*   [ ] **Access Point Firmware:**
+    *   [ ] Define requirements and structure for the access point (Future phase).
+
+## 6. Done
 
 *   [X] Created `organized/` directory.
 *   [X] Created initial `PRD.md`.

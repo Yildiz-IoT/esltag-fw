@@ -1,0 +1,41 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Organized ESL Firmware Refactor Structure
+
+This rule describes the structure and plan for the refactored ESL firmware located in the `organized/` directory, as detailed in [organized/PRD.md](mdc:organized/PRD.md).
+
+**Goal:** Refactor the existing ESL tag and potentially access point firmware into a new, well-structured Zephyr RTOS application structure within the `organized/` directory, improving modularity and maintainability.
+
+**Overall Structure:**
+*   `organized/tag/`: Contains the refactored ESL Tag firmware.
+*   `organized/access_point/`: Placeholder for potential ESL Access Point firmware.
+*   `organized/PRD.md`: Project Requirements Document for the overall refactoring effort.
+
+**Tag Firmware Structure (`organized/tag/`):**
+
+*   `organized/tag/app/`: Main tag application logic & state management.
+*   `organized/tag/bsp/`: Tag Board Support Package.
+*   `organized/tag/drivers/`: Tag hardware drivers (EPD, buttons, etc.).
+*   `organized/tag/bluetooth/`: Tag Bluetooth LE management & ESL Service.
+    *   `organized/tag/bluetooth/esl/`: ESL specific service/profile logic.
+*   `organized/tag/config/`: Tag application configuration (`prj.conf`, Kconfig fragments).
+*   `organized/tag/boards/`: Tag board-specific device tree overlays and Kconfig settings.
+*   `organized/tag/CMakeLists.txt`: Main CMake build script for the tag firmware.
+*   `organized/tag/Kconfig`: Main Kconfig file for the tag firmware features.
+
+**Key Functional Aspects for Tag Firmware (detailed in PRD):**
+*   **JSON-based Display Updates:** The tag will receive display updates via a custom JSON format, not full bitmaps.
+*   **Lifecycle Management:** The tag operates through a defined set of lifecycle states (Manufacturing, Active, Deactivate, etc.), each with specific behaviors and display requirements.
+
+**Current Focus:** The immediate development efforts are focused on the **tag firmware** within the `organized/tag/` directory.
+
+**Development Plan:**
+
+Refer to the **ToDo** section in [organized/PRD.md](mdc:organized/PRD.md) for the step-by-step development plan, primarily focusing on the Tag Firmware sections initially. Always consult this file for the next steps and update it accordingly.
+
+
+
+
