@@ -77,9 +77,10 @@ organized/
     *   [ ] Implement main application state machine skeleton in `organized/tag/app/`.
     *   [ ] Integrate module initializations (BSP, drivers, Bluetooth, ESL) in `organized/tag/app/`.
     *   [ ] Implement basic logic to handle ESL events and update display in `organized/tag/app/`.
-*   [ ] **Integration & Configuration (Tag Firmware):**
-    *   [ ] Create initial `organized/tag/config/prj.conf`.
-    *   [ ] Create initial board overlay in `organized/tag/boards/`.
+*   [X] **Integration & Configuration (Tag Firmware):**
+    *   [X] Create initial `organized/tag/config/` and copy all configuration files from `samples/peripheral_esl/conf/`.
+    *   [X] Create initial `organized/tag/boards/` and copy all board overlay/configuration files from `samples/peripheral_esl/boards/`.
+    *   [X] Copy `CMakeLists.txt`, `Kconfig`, and `sample.yaml` from `samples/peripheral_esl/` to `organized/tag/`.
     *   [ ] Ensure all tag modules are correctly linked via `organized/tag/CMakeLists.txt`.
 *   [ ] **Testing & Refinement (Tag Firmware):**
     *   [ ] Perform initial build and flash test for the **tag**.
@@ -112,6 +113,9 @@ organized/
 ```
 
 *   Each folder contains the corresponding files as migrated from the original codebase.
+*   [X] Migrated all configuration files from `samples/peripheral_esl/conf/` to `organized/tag/config/`.
+*   [X] Migrated all board overlay/configuration files from `samples/peripheral_esl/boards/` to `organized/tag/boards/`.
+*   [X] Migrated `CMakeLists.txt`, `Kconfig`, and `sample.yaml` from `samples/peripheral_esl/` to `organized/tag/`.
 
 ---
 
