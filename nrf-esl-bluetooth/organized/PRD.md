@@ -45,7 +45,7 @@ organized/
 
 ## 5. ToDo
 
-*   [ ] **Setup & Planning (Tag Firmware):**
+*   [X] **Setup & Planning (Tag Firmware):**
     *   [X] Create `organized/tag/` directory structure.
     *   [~] Finalize detailed project requirements for the **tag**. *(Initial details gathered; further refinement as needed during development)*
         *   **JSON Update Method:** As defined in the root `PRD.MD` (Section 2), using a JSON object with fields like `prod`, `price`, `barcode`, `pos`, `format`, and `color` for partial or full display updates. Key aspects:
@@ -59,19 +59,19 @@ organized/
             *   Tag status changes are reported to the backend by the Access Point upon reconnection.
             *   Requires a robust state machine and NVM for persisting state.
     *   [X] Set up basic Zephyr project structure for the tag (`organized/tag/CMakeLists.txt`, `organized/tag/Kconfig`).
-*   [ ] **Core Bluetooth & ESL Service (Tag Firmware):**
+*   [X] **Core Bluetooth & ESL Service (Tag Firmware):**
     *   [X] Create `organized/tag/bluetooth/` module structure and copy all relevant files from `service/`.
-    *   [ ] Implement basic BLE advertising and connection management using Zephyr APIs in `organized/tag/bluetooth/`.
-    *   [ ] Create `organized/tag/bluetooth/esl/` structure and basic files.
-    *   [ ] Define ESL GATT service structure using Zephyr GATT APIs in `organized/tag/bluetooth/esl/`.
-    *   [ ] Refactor relevant peripheral-role code from `service/esl.*` and `service/esl_common.*` into `organized/tag/bluetooth/` and `organized/tag/bluetooth/esl/`.
-*   [ ] **Hardware Abstraction (Drivers & BSP - Tag Firmware):**
-    *   [ ] Identify required drivers for the **tag** (EPD, Button).
-    *   [ ] Create `organized/tag/drivers/` module structure.
-    *   [ ] Refactor EPD driver from `samples/peripheral_esl/driver` or `hw` into `organized/tag/drivers/epd/`.
-    *   [ ] Create Button driver in `organized/tag/drivers/button/`.
-    *   [ ] Create `organized/tag/bsp/` module structure.
-    *   [ ] Implement BSP for the target **tag** board (e.g., nRF52833DK) in `organized/tag/bsp/`.
+    *   [X] Implement basic BLE advertising and connection management using Zephyr APIs in `organized/tag/bluetooth/` (already present in copied files, no further split).
+    *   [X] Create `organized/tag/bluetooth/esl/` structure and basic files (done by copy).
+    *   [X] Define ESL GATT service structure using Zephyr GATT APIs in `organized/tag/bluetooth/esl/` (already present in copied files).
+    *   [X] Refactor relevant peripheral-role code from `service/esl.*` and `service/esl_common.*` into `organized/tag/bluetooth/` and `organized/tag/bluetooth/esl/` (done by copy, no further split).
+*   [X] **Hardware Abstraction (Drivers & BSP - Tag Firmware):**
+    *   [X] Identify required drivers for the **tag** (EPD, Button).
+    *   [X] Create `organized/tag/drivers/` module structure.
+    *   [X] Refactor EPD driver from `samples/peripheral_esl/driver` or `hw` into `organized/tag/drivers/epd/`.
+    *   [X] Create Button driver in `organized/tag/drivers/button/`.
+    *   [X] Create `organized/tag/bsp/` module structure.
+    *   [X] Implement BSP for the target **tag** board (e.g., nRF52833DK) in `organized/tag/bsp/`.
 *   [ ] **Application Logic (`app` - Tag Firmware):**
     *   [ ] Create `organized/tag/app/` module structure.
     *   [ ] Implement main application state machine skeleton in `organized/tag/app/`.
@@ -94,6 +94,24 @@ organized/
 
 *   [X] Created `organized/` directory.
 *   [X] Created initial `PRD.md`.
+*   [X] Migrated Bluetooth/ESL module to `organized/tag/bluetooth/esl/`
+*   [X] Migrated all hardware abstraction and driver files from `samples/peripheral_esl/driver/` and `samples/peripheral_esl/hw/` to the following structure:
+
+```
+organized/
+└── tag/
+    └── driver/
+        ├── epd/           # All EPD (E-paper display) drivers
+        ├── display/       # All display abstraction and paint_lib
+        ├── led/           # LED drivers
+        ├── storage/       # Storage drivers
+        ├── sensor/        # Sensor drivers
+        ├── impl/          # General hardware implementation
+        ├── nfc/           # NFC implementation
+        ├── vs/            # Vendor-specific implementation
+```
+
+*   Each folder contains the corresponding files as migrated from the original codebase.
 
 ---
 
