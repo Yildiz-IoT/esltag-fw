@@ -11,6 +11,9 @@
 *   Initial `CMakeLists.txt` and `Kconfig` copied to `organized/tag/`.
 *   Gathered initial detailed requirements for the tag firmware (JSON updates, lifecycle states) and updated `organized/PRD.md` and the Cursor rule.
 *   The Git working directory should be clean on the `reorganized` branch, and this branch should be pushed to remote.
+*   All Kconfig, YAML, and DTS/overlay files in the new structure have been reviewed for path/source issues.
+*   Only organized/tag/Kconfig needs an rsource path update; all other files are correct and require no changes.
+*   No commit or push has been done yet for these changes; awaiting further instructions.
 
 **Project Plan:**
 *   The detailed plan and progress are tracked in `organized/PRD.md`.

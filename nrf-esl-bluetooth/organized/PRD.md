@@ -116,6 +116,7 @@ organized/
 *   [X] Migrated all configuration files from `samples/peripheral_esl/conf/` to `organized/tag/config/`.
 *   [X] Migrated all board overlay/configuration files from `samples/peripheral_esl/boards/` to `organized/tag/boards/`.
 *   [X] Migrated `CMakeLists.txt`, `Kconfig`, and `sample.yaml` from `samples/peripheral_esl/` to `organized/tag/`.
+*   All Kconfig, YAML, and DTS/overlay files in the new structure have been reviewed for path/source issues. Only `organized/tag/Kconfig` needs an `rsource` path update; all other files are correct. No commit or push has been done yet for these changes.
 
 ---
 
