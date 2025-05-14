@@ -60,7 +60,7 @@ organized/
             *   Requires a robust state machine and NVM for persisting state.
     *   [X] Set up basic Zephyr project structure for the tag (`organized/tag/CMakeLists.txt`, `organized/tag/Kconfig`).
 *   [ ] **Core Bluetooth & ESL Service (Tag Firmware):**
-    *   [ ] Create `organized/tag/bluetooth/` module structure and basic files.
+    *   [X] Create `organized/tag/bluetooth/` module structure and copy all relevant files from `service/`.
     *   [ ] Implement basic BLE advertising and connection management using Zephyr APIs in `organized/tag/bluetooth/`.
     *   [ ] Create `organized/tag/bluetooth/esl/` structure and basic files.
     *   [ ] Define ESL GATT service structure using Zephyr GATT APIs in `organized/tag/bluetooth/esl/`.
